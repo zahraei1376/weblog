@@ -1,144 +1,163 @@
 import React, { useState ,useEffect} from 'react';
 import MaterialTable from 'material-table';
-import { IconButton } from '@material-ui/core';
-import Icon from '@material-ui/core/Icon';
 import { Grid } from '@material-ui/core';
+import { connect } from 'react-redux';
 //////////////////////////////////////////
 import MySnackbar from '../../Component/messageBox/messageBox.component';
-///////////////////////////////////////query
-// import { useMutation} from 'react-apollo';
-// import {UPDATE_EXAM_PARENT, DELETE_EXAM_PARENT} from '../../../graphql/resolver';
-//////////////////
+///////////////////////////////////////
 import { useHistory } from "react-router-dom";
+import MySpinner from '../../Component/MySpinner/MySpinner.component';
 ////////////////////////////////////////
-const ManagerCategoryTableWeblog = ({ getQuestionsId,DataTable , refetchFunc }) => {
-  ///////////////////////////////////////////////////////
-  // const [updateExamParent] = useMutation(UPDATE_EXAM_PARENT);
-  // const [deleteExamParent] = useMutation(DELETE_EXAM_PARENT);
+const ManagerCategoryTableWeblog = ({ currentUser,ParentCategoryId , ItemsMaterial , }) => {
   /////////////////////////
   let history = useHistory();
   //////////////////////////
-  const [showMessage,setShowMessage] = useState(false);
-  const [message,setMessage] =useState('');
-  const [status,setStatus] =useState(0);
+  const [dataTable,setDataTable] = useState([]);
   //////////////////////////
-  const showTimeToTable = (start,end) => {
-      if(start == end){
-        return true;
-      }
-      return false;
-  }
+  const [showMessage,setShowMessage] = useState(false);
+  const [message,setMessage] = useState('');
+  const [status,setStatus] = useState(0);
+  const [loading,setLoading] = useState(0);
+  ////////////////////////////////////////////////
+  useEffect(()=>{
+    //////////////////////////////////////
+    setLoading(true);
+    console.log('currentUser',currentUser);
+    const data = {
+    }
+    fetch("http://185.165.118.211:9074/api/v1/Categories", {
+        headers: {
+          'Authorization': currentUser ? `Bearer ${currentUser} `: '',
+            'Content-Type': 'application/json'
+            },
+        method:"GET",
+        // body: JSON.stringify(data)
+    })
+    .then((response)=>{ 
+        return response.json();   
+    })
+    .then((dataRes)=>{ 
+        console.log('dataRes',dataRes);
+        if(dataRes.isSuccess){
+          if(dataRes.data){
+            setDataTable(dataRes.data.results);
+            
+          }
+          
+        }else{
+            setStatus('0')
+            setMessage(dataRes.message)
+            setShowMessage(true);
+        }
+
+        setLoading(false);
+
+    })
+    .catch(err => {
+        setStatus('0')
+        setMessage(err.Message)
+        setShowMessage(true);
+        setLoading(false);
+    });
+  },[])
   ///////////////////////////////////////////////   
-  const [columns, setColumns] = React.useState([
+  const [columns, setColumns] = useState([
     {
-      title: 'پایه',
-      field: 'exam_level',
-      // lookup: ['1','2','3'],
-      // lookup: [1,2,3],
-      lookup:{
-        '1':'1',
-        '2' :'2',
-        '3':'3',
-      },
-      // appContext.initConfig.newLevel,
+      title: 'شماره' , field: 'questionID', textAlign: 'center',
+      // editable: 'never',
+       render : rowData => rowData && (rowData.tableData.id + 1),
+      
+    },
+    {
+      title: 'نام دسته',
+      field: 'name',
       render: data => {
         return (<p style={{
           fontFamily: 'Bnazanin',
-          fontSize: 16,
           textAlign: 'center',
-          width: '50px',
+          width: '100%',
           fontSize:'1.5rem',
           textAlign:'center',
         }}>
-          {parseInt(data.exam_level) === parseInt(data.exam_level, 10)
-            ? 
-            data.exam_level
-            // appContext.initConfig.newLevel[data.exam_level]
-            : data.exam_level}
+          {data.name}
         </p>)
       },
     },
     {
-      title: 'کلاس',
-      field: 'exam_className',
-      // lookup: ['1','2','3'],
-      // lookup: [1,2,3],
-      lookup:{
-        '1':'1',
-        '2' :'2',
-        '3':'3',
-      },
-      // appContext.initConfig.newClassName,
+      title: 'نام سر دسته',
+      field: 'parentCategoryName',
+      lookup:ItemsMaterial,
       render: data => {
         return (
-          <p
-            style={{ fontFamily: 'Bnazanin', textAlign: 'center', width: '50px',fontSize:'1.5rem',
-            textAlign:'center', }}>
-            {parseInt(data.exam_className) ===
-              parseInt(data.exam_className, 10)
-              ? 
-              data.exam_className
-              // appContext.initConfig.newClassName[data.exam_className]
-              : data.exam_className}
-          </p>)
+          <div style={{ display:'flex',justifyContent:'center', textAlign: 'center', width: '100%', }}>
+            <p
+              style={{ display:'flex',justifyContent:'center', fontFamily: 'Bnazanin', textAlign: 'center',fontSize:'1.5rem', }}>
+              {data.parentCategoryName}
+            </p>
+          </div>)
       },
-    },
-    {
-      title: 'موضوع', field: 'examParent_topic',
-      // lookup: appContext.initConfig.newCourseName,
-      render: data => {
-        return (
-          <p style={{ fontFamily: 'Bnazanin', textAlign: 'center', width: '15rem',fontSize:'1.5rem',
-          textAlign:'center',whiteSpace: 'pre-wrap', wordWrap: 'break-word', }}>
-           {data.examParent_topic}
-          </p>)
-      },
-      editComponent: (props) => (
-        <div style={{width:'14rem',textAlign:'center'}}>
-          <textarea
-          rows="6" cols="50"
-            style={{
-              width: '13rem',
-              // border: "2px solid red",
-              borderRadius: "4px",
-              textAlign: 'center',
-              whiteSpace: 'pre-wrap',
-               wordWrap: 'break-word',
-               padding:'5px',
-            }}
-          type="text"
-          value={props.value}
-          onChange={e => props.onChange(e.target.value)}
-        />
-        </div>
-      ),
     },
   ]);
   ///////////////////////////////////////////////////
+  const sendDataToServer = async(data,url , method) =>{
+    await fetch(url, {
+        headers: {
+          'Authorization': currentUser ? `Bearer ${currentUser} `: '',
+            'Content-Type': 'application/json'
+            },
+        method: method,
+        body: JSON.stringify(data)
+    })
+    .then((response)=>{ 
+        return response.json();   
+    })
+    .then((dataRes)=>{ 
+        console.log(dataRes);
+        if(dataRes.isSuccess){
+            setStatus('1')
+            setMessage('انجام شد');
+            setShowMessage(true);
+            return true;
+        }else{
+            setStatus('0')
+            setMessage(dataRes.Message)
+            setShowMessage(true);
+            return false;
+        }
+
+    })
+    .catch(err => {
+        setStatus('0')
+        setMessage(err.Message)
+        setShowMessage(true);
+        return false;
+    });
+
+  }
   return (
-    <Grid dir="rtl" xs={12} sm={12} md={11} style={{margin:'0 auto',width:'90%'}}>
+    <Grid dir="rtl" item xs={12} sm={12} md={11} style={{margin:'0 auto',width:'90%'}}>
+      {
+          loading ? <MySpinner/> : ''
+      }
       <MaterialTable
-        title="امتحانات"
+        title="دسته بندی ها"
         columns={columns}
-        data={DataTable}
+        data={dataTable}
         localization={{
           header: {
               actions: 'ویرایش'
           },
         }}
         options={{
-          toolbar: false,
-          showTitle: false,
-          search: false,
           headerStyle: {
-            // background:'linear-gradient(to bottom ,#fc8d6d,#bf4f7b,#242d64,#191e3e)' ,
-            background:'linear-gradient(to bottom ,#bf4f7b,#242d64,#191e3e)' ,
+            background:'linear-gradient(to bottom ,#242d64,#242d64)' ,
             fontFamily: 'BTitrBold',
             textAlign: 'center',
             color: '#fff',
-            lineHeight:'20px',
             zIndex: 0,
             fontSize: '12px',
+            width:20,
+            maxWidth: 20
           },
           rowStyle: rowData => ({
             backgroundColor: rowData.tableData.id % 2 === 0 ? '#EEE' : '#FFF',
@@ -146,151 +165,114 @@ const ManagerCategoryTableWeblog = ({ getQuestionsId,DataTable , refetchFunc }) 
             fontSize: 24,
             marginTop: '2px',
             marginTop: '2px',
+            overflowY:'scroll',
           }),
           cellStyle: {
             fontFamily: 'Bnazanin',
             fontSize: 16,
             textAlign: 'center',
+            width: 20,
+            maxWidth: 20
           },
         }}
 
         editable={{
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve ,reject) => {
-              setTimeout(async() => {
-                if (oldData) {
-                  // updateExamParent({ variables: { 
-                  //   userName:"211",
-                  //   password: "211",
-                  //   id: oldData.ParentId,
-                  //   groupId: oldData.groupId,
-                  //   course: newData.exam_courseName,
-                  //   level: newData.exam_level,
-                  //   class: newData.exam_className,
-                  //   examParent_start:myExamParent_start,
-                  //   examParent_end: myExamParent_end,
-                  //   examParent_duration: myDuration,
-                  //   examParent_start_date: myExamParent_start_date,
-                  //   examParent_stop_date:  myExamParent_stop_date,
-                  //   // examParent_start_date: newData.examParent_start_date,
-                  //   // examParent_stop_date: newData.examParent_stop_date,
-                  //   // examParent_start: newData.examParent_start,
-                  //   // examParent_end: newData.examParent_end,
-                  //   // examParent_duration: convertMinutesToMyFormat(newData.examParent_duration),
-                  //   examParent_maxScore: newData.examParent_maxScore != '-' ? newData.examParent_maxScore : "",
-                  //   examParent_method: newData.examParent_method,
-                  //   examParent_topic: newData.examParent_topic != '-' ? newData.examParent_topic : "",
-                  //   // examParent_random: newData.examParent_random,
-                  //   // examParent_backward: newData.examParent_backward,
-                  //   examParent_random: newData.examParent_random == 'true' ? true : false,
-                  //   examParent_backward: newData.examParent_backward == 'true' ? true : false,
-                  //   examChild_falseCoefficient: newData.examChild_falseCoefficient != '-' ? newData.examChild_falseCoefficient : "",
-                  //   examChild_courseCoefficient: newData.examChild_courseCoefficient != '-' ? newData.examChild_courseCoefficient : "",
-                  //  //  examChild_pdf: fileName ? `https://s3.ir-thr-at1.arvanstorage.com/raysa/${fileName}` : oldData.examChild_pdf != '-' ? oldData.examChild_pdf : "",
-                  //   examChild_pdf: fileName ? fileName : oldData.examChild_pdf != '-' ? oldData.examChild_pdf : "",
-                  //   examChild_id: oldData.id,
+          onRowAdd: newData =>
+            new Promise((resolve, reject) => {
+                setTimeout(async() => {
+                  // if(ParentCategoryId && ParentCategoryId.id && ParentCategoryId.name){
+                    console.log('datadata' ,JSON.parse(newData.parentCategoryName));  
+                  const data = {
+                      name: newData.name,
+                      parentCategoryId: JSON.parse(newData.parentCategoryName).id,
+                      parentCategoryName: JSON.parse(newData.parentCategoryName).name,
+                      // parentCategoryName: ParentCategoryId.name,
+                      id:0,
+                    }
+
+                  var promise = new Promise( (resolve2, reject2) => {
+                      var callBack = sendDataToServer(data , 'http://185.165.118.211:9074/api/v1/Categories' ,"POST");
+                      if(callBack){
+                        resolve2();
+                      }else{
+                        reject2();
+                      }
+                  });
+             
+                   promise.then( callBack => {
+                      resolve();
+                   }).catch(err =>{
+                      reject();
+                   });
+                    // console.log('datadata' ,data);
+                    // var callBack = await sendDataToServer(data , 'http://185.165.118.211:9074/api/v1/Categories' ,"POST");
+                    // console.log('callBack',callBack);
+                    // if(callBack){
+                    //   resolve();
+                    // }else{
+                    //   reject();
+                    // }
+
+                    // resolve();
                   // }
-                  // }).then(res=>{
-                  //   // if(res.data && res.data.updateExamParentAndChild){
-                  //   //   resolve();
-                  //   //   setMessage('ثبت شد');
-                  //   //   setStatus('1');
-                  //   //   setShowMessage(!showMessage);
-                  //   //   refetchFunc();
-                  //   // }else{
-                  //   //   reject();
-                  //   //   setStatus('0')
-                  //   //   setMessage('ثبت نشد')
-                  //   //   setShowMessage(!showMessage);
-                  //   // }
-                  //   ///////////////////////////////
-                  //   if(!res.data){
-                  //     // reject();
-                  //     setStatus('0')
-                  //     setMessage('طراح امتحان میتواند امتحان را ویرایش کند');
-                  //     setShowMessage(!showMessage);
-                  //     reject();
-                  //     // setTimeout(()=>{
-                  //     //   refetchFunc();
-                  //     // },1000);
-                  //     // refetchFunc();
-                  //   }else if(res.data && !res.data.updateExamParentAndChild){
-                  //     // reject();
-                  //     setStatus('0')
-                  //     setMessage('ثبت نشد')
-                  //     setShowMessage(!showMessage);
-                  //     reject();
-                  //     // setTimeout(()=>{
-                  //     //   refetchFunc();
-                  //     // },1000)
-                  //   }else if(res.data && res.data.updateExamParentAndChild){
-                  //     // resolve();
-                  //     setMessage('ثبت شد');
-                  //     setStatus('1');
-                  //     setShowMessage(!showMessage);
-                  //     resolve();
-                  //     refetchFunc();
-                  //     // reject();
-                  //     // refetchFunc();
-                  //     // setTimeout(()=>{
-                  //     //   refetchFunc();
-                  //     // },1000)
-                  //   }else{
-                  //     // reject();
-                  //     setStatus('0')
-                  //     setMessage('ثبت نشد')
-                  //     setShowMessage(!showMessage);
-                  //     reject();
-                  //     // setTimeout(()=>{
-                  //     //   refetchFunc();
-                  //     // },1000)
-                  //   }
-                  // })
-                }
-              },600);
-              /////////////////////////////////////////////////
+                  // else{
+                  //   setStatus('0')
+                  //   setMessage('ابتدا سر دسته را مشخص کنید');
+                  //   setShowMessage(true);
+                  // reject();
+                  // }
+                    
+
+                    
+                }, 1000);
             }),
-          onRowDelete: oldData =>
-            new Promise((resolve ,reject) => {
-              setTimeout(async() => {
-                // await deleteExamParent({ variables: { 
-                //   userName: "211", 
-                //   password: "211", 
-                //   id: oldData.id,
-                // }
-                // }).then(res=>{
-                //   if(!res.data){
-                //     reject();
-                //     setStatus('0')
-                //     setMessage('طراح امتحان میتواند امتحان را حذف کند');
-                //     setShowMessage(!showMessage);
-                //   }else if(res.data && !res.data.deleteExamChild){
-                //     reject();
-                //     setStatus('0')
-                //     setMessage('ثبت نشد')
-                //     setShowMessage(!showMessage);
-                //   }else if(res.data && res.data.deleteExamChild){
-                //     resolve();
-                //     setMessage('ثبت شد');
-                //     setStatus('1');
-                //     setShowMessage(!showMessage);
-                //     refetchFunc();
-                //   }else{
-                //     reject();
-                //     setStatus('0')
-                //     setMessage('ثبت نشد')
-                //     setShowMessage(!showMessage);
-                //   }
-                // })
-                
-              }, 600);
+        onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+                setTimeout(async() => {
+                    // const data = {
+                    //   name: newData.name,
+                    //   parentCategoryId: JSON.parse(newData.parentCategoryName).id,
+                    //   parentCategoryName: JSON.parse(newData.parentCategoryName).name,
+                    //   id:oldData.id,
+                    // }
+                    // var callBack = await sendDataToServer(data , "http://185.165.118.211:9074/api/v1/Categories", "PUT");
+                    // if(callBack){
+                    //   resolve();
+                    // }else{
+                    //   reject();
+                    // }
+
+                    resolve();
+                }, 1000);
             }),
+        onRowDelete: oldData =>
+            new Promise((resolve, reject) => {
+                setTimeout(async() => {
+                  
+                    // var callBack = await sendDataToServer(data , `http://185.165.118.211:9074/api/v1/Categories/${oldData.id}`, "DELETE");
+                    // if(callBack){
+                    //   resolve();
+                    // }else{
+                    //   reject();
+                    // }
+
+                    resolve();
+                }, 1000);
+            })
         }}
       />
       {
         showMessage ? <MySnackbar message={message} status={status} showMessage={showMessage} setShowMessage={setShowMessage} /> : ''
       }
+      {/* {
+          loading ? <MySpinner/> : ''
+      } */}
     </Grid>
   );
 };
-export default React.memo(ManagerCategoryTableWeblog);
+// export default React.memo(ManagerCategoryTableWeblog);
+const mapStateToProps = state => ({
+  currentUser:state.user.currentUser,
+});
+
+export  default connect(mapStateToProps , null)(ManagerCategoryTableWeblog);

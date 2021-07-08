@@ -165,7 +165,18 @@ export const ArrowIcon = styled(KeyboardArrowLeftIcon)`
 
 `;
 
-export const MyNavLink = styled(NavLink)`
+// export const MyNavLink = styled(NavLink)`
+//     text-decoration: none;
+//     color:#000;
+//     font-family:Bnazanin;
+//     font-size:2rem;
+
+//     &:hover{
+//         text-decoration: none;
+//     }
+// `;
+
+export const MyNavLink = styled.a`
     text-decoration: none;
     color:#000;
     font-family:Bnazanin;

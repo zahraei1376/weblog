@@ -1,36 +1,26 @@
 import { UserActionTypes } from './user.types';
 
-const INITIAL = {
+const INITIALSTATE = {
     currentUser:null,
-    isTeacher:null,
-    isAdmin:null,
-    errorMessage:undefined
+    userInfo: null,
 }
 
-const UserReducer = (state=INITIAL , action) => {
+const UserReducer = (state=INITIALSTATE , action) => {
     switch(action.type){
-        case UserActionTypes.FETCH_USER_SECCUSS:
+        case UserActionTypes.SET_CURRENT_USER:
             return {
                 ...state,
                 currentUser:action.payload,
-                isTeacher:action.isTeacher,
-                isAdmin:action.isAdmin
             }
-        case UserActionTypes.FETCH_USER_FAILURE:
+
+        case UserActionTypes.SET_USER_INFO:
             return {
                 ...state,
-                // isFetching:false,
-                errorMessage:action.payload
-            }
+                userInfo:action.payload,
+            } 
+
         default:
             return state;
-        // case UserActionTypes.SET_CURRENT_USER:
-        //     return{
-        //         ...state,
-        //         currentUser:action.payload
-        //     }
-        // default:
-        //     return state;
     }
 };
 

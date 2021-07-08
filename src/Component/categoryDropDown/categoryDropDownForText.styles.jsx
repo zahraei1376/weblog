@@ -21,6 +21,10 @@ export const MySelect = styled(Select)`
         border-bottom: 3px solid #ff7730 !important;
     }
 
+    // @media only screen and (max-width: 56.25em){
+    //     width:100% !important;
+    // }
+
 `;
 
 export const MyMenuItem = styled(MenuItem)`

@@ -10,7 +10,7 @@ export const CateroryWeblogContainer = styled.div`
     // border:1px solid #000;
     border-radius:3rem;
     margin:3rem;
-    padding-bottom:3rem;
+    padding:3rem 0;
 `;
 
 export const CategortyContainer = styled.div`

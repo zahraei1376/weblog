@@ -26,25 +26,25 @@ export const NavberContainer = styled.div`
     align-items:center;
     background-color: #322F32;
     // background-color: transparent;
-    border-bottom: 4px solid #521751;
+    border-bottom: 1px solid #191e3e;
     top: 0;
     left: 0;
-    box-shadow:0px 0px 15px 0px #000000;
+    box-shadow:0px 0px 2px 1px #191e3e
 `;
 
 export const UserIconButton = styled(IconButton)`
     margin-left:1rem !important;
-    position:relative;
+    // position:relative;
 
-    div:first-of-type {
-      display:none;
-    }
+    // div:first-of-type {
+    //   display:none;
+    // }
     
-    &:active > div:first-of-type {
-      display: grid;
-      animation: ${fade} 1.1s linear;
-      animation-iteration-count: 1;
-    }
+    // &:active > div:first-of-type {
+    //   display: grid;
+    //   animation: ${fade} 1.1s linear;
+    //   animation-iteration-count: 1;
+    // }
 `;
 
 export const MyUserIcon = styled(AssignmentIndIcon)`
