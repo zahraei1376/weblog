@@ -1,7 +1,7 @@
 import React , {useEffect,useState} from 'react';
 import ManagerTextTableWeblog from './managerTextTableWeblog.component';
 import CategoryDropDownForText from '../../Component/categoryDropDown/categoryDropDownForText.component';
-import {TextWeblogContainer ,TextContainer} from './managerTextWeblog.styles';
+import {TextWeblogContainer ,TextBacContainer,TextContainer,MaterialTableContainer} from './managerTextWeblog.styles';
 import { connect } from 'react-redux';
 import MySnackbar from '../../Component/messageBox/messageBox.component';
 /////////////////////////////////////////
@@ -49,17 +49,22 @@ const ManagerTextWeblog = ({currentUser}) =>{
 
     return(
         <TextWeblogContainer>
-            <TextContainer>
-                <CategoryDropDownForText 
-                    setCategoryId={setCategoryId}
-                    Items={items}
+            <TextBacContainer>
+                <TextContainer>
+                    <CategoryDropDownForText 
+                        setCategoryId={setCategoryId}
+                        Items={items}
+                    />
+                </TextContainer>
+            </TextBacContainer>
+           
+            <MaterialTableContainer>
+                <ManagerTextTableWeblog
+                    categoryId={categoryId}
+                    // ItemsMaterial={ItemsMaterial}
                 />
-            </TextContainer>
-
-            <ManagerTextTableWeblog
-                categoryId={categoryId}
-                // ItemsMaterial={ItemsMaterial}
-            />
+            </MaterialTableContainer>
+            
             {
                 showMessage ? <MySnackbar message={message} status={status} showMessage={showMessage} setShowMessage={setShowMessage} /> : ''
             }

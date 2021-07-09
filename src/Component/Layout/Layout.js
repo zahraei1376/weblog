@@ -21,7 +21,7 @@ const Layout = () => (
                     <Route exact path="/managerCateroryWeblog"  component={ManagerCateroryWeblog}/>
                     <Route exact path="/managerTextWeblog" component={ManagerTextWeblog}/>
                     {/* <Redirect to="/404" /> */}
-                    {/* <Route path='*' exact={true} component={GenericNotFound} /> */}
+                    {/* <Route component={GenericNotFound} /> */}
                 </Suspense>
             </Switch>
         </Router>

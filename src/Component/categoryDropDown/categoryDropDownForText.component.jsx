@@ -12,20 +12,37 @@ const theme = createMuiTheme({
         "&$focused": {
           color: "tomato",
           fontWeight: "bold"
-        }
+        },
+        border:'1px solod #bf4f7b !important',
       }, 
       
       focused: {}
     }
   }
 });
+
+// const styles = theme => ({
+//   select: {
+//       '&:before': {
+//           borderColor: color,
+//       },
+//       '&:after': {
+//           borderColor: color,
+//       }
+//   },
+//   icon: {
+//       fill: color,
+//   },
+// });
 ////////////////////////////////////////
 const useStyles = makeStyles((theme) => ({
   formControl: {
     width:'50% !important',
     color:'#000 !important',
     textAlign:'center',
-    padding:'2rem 0 4rem 0',
+    // padding:'2rem 0 4rem 0',
+    backgroundColor:'#eee',
+    borderRadius:'5px',
     // border:'1px solod #bf4f7b !important',
     select: {
       border:'1px solod #bf4f7b !important',
@@ -43,7 +60,19 @@ const useStyles = makeStyles((theme) => ({
         }
       }, 
       
-      focused: {}
+      focused: {},
+
+        select: {
+          '&:before': {
+              borderColor: '#3f87a6',
+          },
+          '&:after': {
+              borderColor: '#3f87a6',
+          }
+      },
+      icon: {
+          fill:'#3f87a6',
+      },
     
   },
 }));
@@ -66,6 +95,7 @@ const CategoryDropDownForText = ({setCategoryId , Items}) => {
           onChange={handleChange}
           label="دسته بندی"
           variant="outlined"
+          className={classes.select}
         >
           {
             Items.map((item, index)=>{

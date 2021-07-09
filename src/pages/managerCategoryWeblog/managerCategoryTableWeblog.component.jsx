@@ -8,6 +8,10 @@ import MySnackbar from '../../Component/messageBox/messageBox.component';
 import { useHistory } from "react-router-dom";
 import MySpinner from '../../Component/MySpinner/MySpinner.component';
 ////////////////////////////////////////
+import {AddRowBtn} from './managerCategoryWeblog.styles';
+import AddIcon from '@material-ui/icons/Add';
+import Icon from '@material-ui/core/Icon';
+////////////////////////////////////////
 const ManagerCategoryTableWeblog = ({ currentUser,ParentCategoryId , ItemsMaterial , }) => {
   /////////////////////////
   let history = useHistory();
@@ -134,15 +138,29 @@ const ManagerCategoryTableWeblog = ({ currentUser,ParentCategoryId , ItemsMateri
     });
 
   }
+  //////////////////////////////////////////////////
+  const handleAddRow = () =>{
+    document.querySelector("[data-mycustomid='add-icon-handler']").parentNode.click();
+  }
+  ///////////////////////////////////////////////////
   return (
-    <Grid dir="rtl" item xs={12} sm={12} md={11} style={{margin:'0 auto',width:'90%'}}>
+    <Grid dir="rtl" item xs={12} sm={12} md={11} 
+    style={{margin:'0 auto',width:'90%',
+    position:'relative',}}>
       {
           loading ? <MySpinner/> : ''
       }
+      <div style={{width:'100%', position:'relative',}}>
+      <AddRowBtn onClick={handleAddRow}>
+        <AddIcon style={{fontSize:'3rem'}} />
+      </AddRowBtn>
       <MaterialTable
         title="دسته بندی ها"
         columns={columns}
         data={dataTable}
+        icons={{
+          Add: props => <Icon data-mycustomid={"add-icon-handler"} />
+        }}
         localization={{
           header: {
               actions: 'ویرایش'
@@ -150,17 +168,18 @@ const ManagerCategoryTableWeblog = ({ currentUser,ParentCategoryId , ItemsMateri
         }}
         options={{
           headerStyle: {
-            background:'linear-gradient(to bottom ,#242d64,#242d64)' ,
+            // background:'linear-gradient(to bottom ,#242d64,#242d64)' ,
+            background:'#EEE',
             fontFamily: 'BTitrBold',
             textAlign: 'center',
-            color: '#fff',
+            color: '#000',
             zIndex: 0,
             fontSize: '12px',
             width:20,
             maxWidth: 20
           },
           rowStyle: rowData => ({
-            backgroundColor: rowData.tableData.id % 2 === 0 ? '#EEE' : '#FFF',
+            backgroundColor: rowData.tableData.id % 2 === 0 ? '#FFF' : '#EEE',
             fontFamily: 'Bnazanin',
             fontSize: 24,
             marginTop: '2px',
@@ -261,6 +280,7 @@ const ManagerCategoryTableWeblog = ({ currentUser,ParentCategoryId , ItemsMateri
             })
         }}
       />
+      </div>
       {
         showMessage ? <MySnackbar message={message} status={status} showMessage={showMessage} setShowMessage={setShowMessage} /> : ''
       }

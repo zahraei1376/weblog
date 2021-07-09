@@ -31,43 +31,6 @@ const ManagerTextTableWeblog = ({ currentUser,categoryId , ItemsMaterial , }) =>
   ////////////////////////////////////////////////
   useEffect(()=>{
     refreshData();
-    // const data = {
-    //   // name: "",
-    //   // parentTextId: "",
-    //   // parentTextName: "",
-    //   // id:"",
-    // }
-
-    // fetch(`http://185.165.118.211:9074/api/v1/Posts/${categoryId ? categoryId : ''}`, {
-    //     headers: {
-    //         'Authorization': currentUser ? `Bearer ${currentUser} `: '',
-    //         'Content-Type': 'application/json'
-    //         },
-    //     method:"GET",
-    //     // body: JSON.stringify(data)
-    // })
-    // .then((response)=>{ 
-    //     return response.json();   
-    // })
-    // .then((dataRes)=>{ 
-    //     console.log(dataRes);
-    //     if(dataRes.isSuccess){
-    //         // setStatus('0')
-    //         // setMessage('وارد شدید');
-    //         // setShowMessage(true);
-    //         setDataTable(dataRes.data.results);
-    //     }else{
-    //         setStatus('0')
-    //         setMessage(dataRes.message)
-    //         setShowMessage(true);
-    //     }
-
-    // })
-    // .catch(err => {
-    //     setStatus('0')
-    //     setMessage(err.message)
-    //     setShowMessage(true);
-    // });
   },[categoryId])
   ///////////////////////////////////////////////   
   const refreshData = () =>{
@@ -214,17 +177,18 @@ const ManagerTextTableWeblog = ({ currentUser,categoryId , ItemsMaterial , }) =>
       {
           loading ? <MySpinner/> : ''
       }
-      <MuiThemeProvider theme={themeTable}>
-      {/* <AddRowBtn onClick={handleAddRow}>
-        <AddIcon style={{fontSize:'2rem'}} />
-      </AddRowBtn> */}
-        <MaterialTable
-          title="دسته بندی ها"
+      <div style={{width:'100%', position:'relative',}}>
+        <MuiThemeProvider theme={themeTable}>
+          <AddRowBtn onClick={handleAddRow}>
+        <AddIcon style={{fontSize:'3rem'}} />
+      </AddRowBtn>
+          <MaterialTable
+            title="دسته بندی ها"
           columns={columns}
           data={dataTable}
-          // icons={{
-          //   Add: props => <Icon data-mycustomid={"add-icon-handler"} />
-          // }}
+          icons={{
+            Add: props => <Icon data-mycustomid={"add-icon-handler"} />
+          }}
           localization={{
             header: {
                 actions: 'ویرایش'
@@ -232,20 +196,21 @@ const ManagerTextTableWeblog = ({ currentUser,categoryId , ItemsMaterial , }) =>
           }}
           options={{
             // toolbar: false,
-            // showTitle: false,
+            showTitle: false,
             // search: false,
             headerStyle: {
               // background:'linear-gradient(to bottom ,#fc8d6d,#bf4f7b,#242d64,#191e3e)' ,
-              background:'linear-gradient(to bottom ,#242d64,#242d64)' ,
+              // background:'linear-gradient(to bottom ,#242d64,#242d64)' 
+              background:'#EEE',
               fontFamily: 'BTitrBold',
               textAlign: 'center',
-              color: '#fff',
+              color: '#000',
               lineHeight:'20px',
               zIndex: 0,
               fontSize: '12px',
             },
             rowStyle: rowData => ({
-              backgroundColor: rowData.tableData.id % 2 === 0 ? '#EEE' : '#FFF',
+              backgroundColor: rowData.tableData.id % 2 === 0 ? '#FFF' : '#EEE',
               fontFamily: 'Bnazanin',
               fontSize: 24,
               marginTop: '2px',
@@ -256,6 +221,7 @@ const ManagerTextTableWeblog = ({ currentUser,categoryId , ItemsMaterial , }) =>
               fontSize: 16,
               textAlign: 'center',
             },
+            
           }}
 
           editable={{
@@ -331,9 +297,10 @@ const ManagerTextTableWeblog = ({ currentUser,categoryId , ItemsMaterial , }) =>
             //             // resolve();
             //         }, 1000);
             //     })
-            }}
+          }}
         />
       </MuiThemeProvider>
+      </div>
       {
         showMessage ? <MySnackbar message={message} status={status} showMessage={showMessage} setShowMessage={setShowMessage} /> : ''
       }

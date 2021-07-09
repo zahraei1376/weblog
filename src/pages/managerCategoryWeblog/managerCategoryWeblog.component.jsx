@@ -2,7 +2,7 @@ import React , {useState} from 'react';
 import ManagerCategoryTableWeblog from './managerCategoryTableWeblog.component';
 import CategoryDropDown from '../../Component/categoryDropDown/categoryDropDown.component';
 import SelectCategoryComponent from '../../Component/selectCategory/selectCaterory.component';
-import {CateroryWeblogContainer ,CategortyContainer} from './managerCategoryWeblog.styles';
+import {CateroryWeblogContainer ,TextBacContainer,MaterialTableContainer,TitleContainer,Title,CategortyContainer} from './managerCategoryWeblog.styles';
 
 const Items = [
     {id:'1' ,title:'خودرو'},
@@ -42,16 +42,20 @@ const ManagerCateroryWeblog = () =>{
     const [ParentCategoryId , setParentCategoryId] = useState('');
     return(
         <CateroryWeblogContainer>
-            {/* <CategortyContainer>
-                <CategoryDropDown 
-                    setParentCategoryId={setParentCategoryId}
-                    Items={Items}
+            <TextBacContainer>
+                <TitleContainer>
+
+                </TitleContainer>
+                <Title>اضافه کردن دسته بندی وبلاگ</Title>
+            </TextBacContainer>
+
+            <MaterialTableContainer>
+                <ManagerCategoryTableWeblog
+                    // ParentCategoryId={ParentCategoryId}
+                    ItemsMaterial={ItemsMaterial}
                 />
-            </CategortyContainer> */}
-            <ManagerCategoryTableWeblog
-                // ParentCategoryId={ParentCategoryId}
-                ItemsMaterial={ItemsMaterial}
-            />
+            </MaterialTableContainer>
+           
         </CateroryWeblogContainer>
     )
 };
