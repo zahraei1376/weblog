@@ -13,7 +13,7 @@ const ManagerTextWeblog = lazy( () => import('../../pages/managerTextWeblog/mana
 const Layout = () => (
     <div>
         <MyNavbar/>
-        <Router>
+        {/* <Router> */}
             <Switch>
                 <Suspense fallback={<MySpinner/>}>
                     <Route exact path="/" component={LoginPage}/>
@@ -24,7 +24,7 @@ const Layout = () => (
                     {/* <Route component={GenericNotFound} /> */}
                 </Suspense>
             </Switch>
-        </Router>
+        {/* </Router> */}
     </div>
     
     )

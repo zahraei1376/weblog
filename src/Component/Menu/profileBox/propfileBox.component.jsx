@@ -30,13 +30,22 @@ function PopoverPopupState({userInfo}) {
               horizontal: 'center',
             }}
           >
-            <Box p={2}>
-              <MyTypography>کاربر عزیز {userInfo.userName} خو ش آمدید</MyTypography>
+            {/* {userInfo ? <Box p={2}>
+              <MyTypography>کاربر عزیز {userInfo.userName ? userInfo.userName : ''} خو ش آمدید</MyTypography>
               <Divider />
               <MyTypography>اطلاعات زیر برای شما ثبت شده است</MyTypography>
-              <MyTypography>نام : {userInfo.fullName}</MyTypography>
-              <MyTypography>ایمیل : {userInfo.email}</MyTypography>
+              <MyTypography>نام : {userInfo.fullName ? userInfo.fullName : ''}</MyTypography>
+              <MyTypography>ایمیل : {userInfo.email ? userInfo.email : ''}</MyTypography>
+            </Box> : ''} */}
+
+            <Box p={2}>
+              <MyTypography>کاربر عزیز {userInfo && userInfo.userName ? userInfo.userName : ''} خو ش آمدید</MyTypography>
+              <Divider />
+              <MyTypography>اطلاعات زیر برای شما ثبت شده است</MyTypography>
+              <MyTypography>نام : {userInfo && userInfo.fullName ? userInfo.fullName : ''}</MyTypography>
+              <MyTypography>ایمیل : {userInfo && userInfo.email ? userInfo.email : ''}</MyTypography>
             </Box>
+
           </Popover>
         </div>
       )}

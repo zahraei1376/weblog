@@ -68,17 +68,21 @@ const Toolbar = (props) => {
         {ITEMS ? ITEMS.map((item ,index) =>{
           return(
             <div key={index}>
-                {props.currentUser 
+                {/* {props.currentUser 
                  ? <ListItem onClick={()=>handleUrl(item.url)}>
                    <IconContainer>{item.icon}</IconContainer> 
-                   {/* <MyNavLink exact to = {item.url}>{item.text}</MyNavLink> */}
                    <MyNavLink href = {item.url}>{item.text}</MyNavLink>
                    </ListItem>
                  : <ListItem onClick={()=>handleUrl('/')}>
                  <IconContainer>{item.icon}</IconContainer> 
-                 {/* <MyNavLink exact to = "/">{item.text}</MyNavLink> */}
                  <MyNavLink href="/">{item.text}</MyNavLink>
-                 </ListItem>}
+                 </ListItem>} */}
+
+                  <ListItem onClick={()=>handleUrl(item.url)}>
+                    <IconContainer>{item.icon}</IconContainer> 
+                    <MyNavLink href = {item.url}>{item.text}</MyNavLink>
+                  </ListItem>
+
                  <Divider />
               
             </div>

@@ -9,9 +9,13 @@ const MyNavbar = ({currentUser}) =>{
         <NavberContainer>
             <Toolbar />
 
-           {currentUser ? <UserIconButton>
+           {/* {currentUser ? <UserIconButton>
                 <PopoverPopupState/>
-            </UserIconButton> : ''}
+            </UserIconButton> : ''} */}
+
+            <UserIconButton>
+                <PopoverPopupState/>
+            </UserIconButton>        
             
         </NavberContainer>
     )
