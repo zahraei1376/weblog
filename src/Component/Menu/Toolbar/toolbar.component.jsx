@@ -4,15 +4,38 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Divider from '@material-ui/core/Divider';
-import ListImag from '../../../asset/img/start2.png'; 
-import { useHistory } from "react-router-dom";
-import {DrawerContainer,IconContainer,MyListIcon ,List ,ListItem ,ListImg,ImgContainer,MyNavLink,ArrowIcon,ArrowIconButton,ListLink} from './toolbar.styles';
+import ListImag from '../../../asset/img/start2.png';
+import { useHistory } from 'react-router-dom';
+import {
+  DrawerContainer,
+  IconContainer,
+  MyListIcon,
+  List,
+  ListItem,
+  ListImg,
+  ImgContainer,
+  MyNavLink,
+  ArrowIcon,
+  ArrowIconButton,
+  ListLink,
+  ArrowCloseIcon,
+} from './toolbar.styles';
 /////////////////////////////
 const ITEMS = [
-  {rol:'admin', text:'ورود' , url:'/',icon:<MyListIcon/>},
-  {rol:'admin', text:'مدیریت دسته بندی' , url:'/managerCateroryWeblog',icon:<MyListIcon/>},
-  {rol:'admin', text:'مدیریت مطالب' , url:'/managerTextWeblog',icon:<MyListIcon/>},
-]
+  { rol: 'admin', text: 'ورود', url: '/', icon: <MyListIcon /> },
+  {
+    rol: 'admin',
+    text: 'مدیریت دسته بندی',
+    url: '/managerCateroryWeblog',
+    icon: <MyListIcon />,
+  },
+  {
+    rol: 'admin',
+    text: 'مدیریت مطالب',
+    url: '/managerTextWeblog',
+    icon: <MyListIcon />,
+  },
+];
 /////////////////////////////
 const useStyles = makeStyles({
   list: {
@@ -36,15 +59,19 @@ const Toolbar = (props) => {
   /////////////////////////////
   let history = useHistory();
   /////////////////////////////
-  const handleUrl = (url) =>{
-    setTimeout(()=>{
+  const handleUrl = (url) => {
+    setTimeout(() => {
       history.push(url);
-    },1000);
+    }, 1000);
     // history.push(url)
-  }
-   /////////////////////////////
+  };
+  /////////////////////////////
   const toggleDrawer = (anchor, open) => (event) => {
-    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
 
@@ -61,14 +88,18 @@ const Toolbar = (props) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
+        <ArrowIconButton close="true">
+          <ArrowCloseIcon />
+        </ArrowIconButton>
         <ImgContainer>
           <ListImg src={ListImag} />
         </ImgContainer>
         <Divider />
-        {ITEMS ? ITEMS.map((item ,index) =>{
-          return(
-            <div key={index}>
-                {/* {props.currentUser 
+        {ITEMS
+          ? ITEMS.map((item, index) => {
+              return (
+                <div key={index} style={{ width: '100%' }}>
+                  {/* {props.currentUser 
                  ? <ListItem onClick={()=>handleUrl(item.url)}>
                    <IconContainer>{item.icon}</IconContainer> 
                    <MyNavLink href = {item.url}>{item.text}</MyNavLink>
@@ -78,37 +109,39 @@ const Toolbar = (props) => {
                  <MyNavLink href="/">{item.text}</MyNavLink>
                  </ListItem>} */}
 
-                  <ListItem onClick={()=>handleUrl(item.url)}>
-                    <IconContainer>{item.icon}</IconContainer> 
-                    <MyNavLink href = {item.url}>{item.text}</MyNavLink>
+                  <ListItem>
+                    <IconContainer>{item.icon}</IconContainer>
+                    <MyNavLink href={item.url}>{item.text}</MyNavLink>
                   </ListItem>
 
-                 <Divider />
-              
-            </div>
-          )
-        }): ''}
+                  <Divider />
+                </div>
+              );
+            })
+          : ''}
       </List>
     </div>
   );
   /////////////////////////////
   return (
     <DrawerContainer>
-       <ArrowIconButton onClick={toggleDrawer("right", true)}><ArrowIcon/></ArrowIconButton>
-          <SwipeableDrawer
-            anchor={"right"}
-            open={state["right"]}
-            onClose={toggleDrawer("right", false)}
-            onOpen={toggleDrawer("right", true)}
-          >
-            {list("right")}
-          </SwipeableDrawer>
+      <ArrowIconButton onClick={toggleDrawer('right', true)}>
+        <ArrowIcon />
+      </ArrowIconButton>
+      <SwipeableDrawer
+        anchor={'right'}
+        open={state['right']}
+        onClose={toggleDrawer('right', false)}
+        onOpen={toggleDrawer('right', true)}
+      >
+        {list('right')}
+      </SwipeableDrawer>
     </DrawerContainer>
   );
-}
+};
 
-const mapStateToProps = state => ({
-    currentUser:state.user.currentUser,
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
 });
 
-export  default connect(mapStateToProps , null)(Toolbar);
+export default connect(mapStateToProps, null)(Toolbar);
